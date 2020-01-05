@@ -25,6 +25,7 @@ from keras.optimizers import SGD
 from keras.models import model_from_json
 from keras.preprocessing.image import load_img
 from keras.preprocessing.image import img_to_array
+import cv2
 
 # load train and test dataset
 def load_dataset():
@@ -161,16 +162,63 @@ def load_image(filename):
 	img = img / 255.0
 	return img
 
-def predict_image_with_existing_model():
+def numberofcontours():
+	img = cv2.imread(r'../img/eins_zwei_fier_handwritten.png')
+	imgray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+	ret, thresh = cv2.threshold(imgray, 127, 255, 0)
+	#thresh = cv2.adaptiveThreshold(imgray,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY,11,2)
+	contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+	print("Number of contours = " + str(len(contours)))
+	print(contours[0])
+	#cv2.drawContours(img, contours, -1, (0, 255, 0), 3)
+	#cv2.drawContours(imgray, contours, -1, (0, 255, 0), 3)
+
+	cv2.imshow('Image', img)
+	cv2.imshow('Image GRAY', imgray)
+
+	orig = img.copy()
+	i = 0
+	#sorted_ctrs = sorted(contours, key=lambda ctr: cv2.boundingRect(ctr)[1])
+	# Sorting from Left to Right, doesn't take in mind multiple possible rows
+	sorted_ctrs = sorted(contours, key=lambda ctr: cv2.boundingRect(ctr)[1] + cv2.boundingRect(ctr)[0] * img.shape[0] )
+	#sorted_ctrs = sorted(contours, key=lambda ctr: cv2.boundingRect(ctr)[0] + cv2.boundingRect(ctr)[1] * img.shape[1] )
+	# x + y * w
+
+	for cnt in sorted_ctrs:
+		# Check the area of contour, if it is very small ignore it
+		if(cv2.contourArea(cnt) < 100):
+			continue
+		#skip overall conture picture
+		
+		# Filtered countours are detected
+		x,y,w,h = cv2.boundingRect(cnt)
+
+		    # Taking ROI of the cotour
+		#roi = img[y:y+h, x:x+w]
+		roi = imgray[y:y+h, x:x+w]
+
+		    # Mark them on the image if you want
+		cv2.rectangle(orig,(x,y),(x+w,y+h),(0,255,0),2)
+
+		    # Save your contours or characters
+		cv2.imwrite("../img/roi" + str(i) + ".png", roi)
+		i = i + 1
+	return i
+
+def predict_image_with_existing_model(numofpics):
+	for i in range(numofpics):
 	# load the image
-	img = load_image('../img/fier_handwritten.png')
-	# load model
-	model = load_existing_model()
-	# predict the class
-	digit = model.predict_classes(img)
-	print(digit[0])
+		#img = load_image('../img/fuenf_handwritten.png')
+		img = load_image('../img/roi'+ str(i) + '.png')
+	
+		# load model
+		model = load_existing_model()
+		# predict the class
+		digit = model.predict_classes(img)
+		print(digit[0])
 	
 	
 # entry point, run the test harness
 #run_test_harness()
-predict_image_with_existing_model()
+#predict_image_with_existing_model(2)
+predict_image_with_existing_model(numberofcontours())
