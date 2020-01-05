@@ -163,7 +163,7 @@ def load_image(filename):
 
 def predict_image_with_existing_model():
 	# load the image
-	img = load_image('../img/eins_zwei_fier_handwritten.png')
+	img = load_image('../img/fier_handwritten.png')
 	# load model
 	model = load_existing_model()
 	# predict the class
