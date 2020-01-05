@@ -32,7 +32,9 @@ i = 0
 
 
 #sorted_ctrs = sorted(contours, key=lambda ctr: cv2.boundingRect(ctr)[1])
-sorted_ctrs = sorted(contours, key=lambda ctr: cv2.boundingRect(ctr)[0] + cv2.boundingRect(ctr)[1] * img.shape[1] )
+# Sorting from Left to Right, doesn't take in mind multiple possible rows
+sorted_ctrs = sorted(contours, key=lambda ctr: cv2.boundingRect(ctr)[1] + cv2.boundingRect(ctr)[0] * img.shape[0] )
+#sorted_ctrs = sorted(contours, key=lambda ctr: cv2.boundingRect(ctr)[0] + cv2.boundingRect(ctr)[1] * img.shape[1] )
 # x + y * w
 
 
