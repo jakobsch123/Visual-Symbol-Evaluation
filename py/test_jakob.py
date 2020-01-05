@@ -59,7 +59,7 @@ def define_model():
 	model.add(Dense(100, activation='relu', kernel_initializer='he_uniform'))
 	model.add(Dense(10, activation='softmax'))
 	# compile model
-	opt = SGD(lr=0.01, momentum=0.9)
+	opt = SGD(lr=0.001, momentum=0.9)
 	model.compile(optimizer=opt, loss='categorical_crossentropy', metrics=['accuracy'])
 	return model
 
@@ -131,12 +131,12 @@ def run_test_harness():
 
 def load_existing_model():
 	# load json and create model
-	json_file = open('model.json', 'r')
+	json_file = open('modelv2.json', 'r')
 	loaded_model_json = json_file.read()
 	json_file.close()
 	model = model_from_json(loaded_model_json)
 	# load weights into new model
-	model.load_weights("model.h5")
+	model.load_weights("modelv2.h5")
 	print("Loaded model from disk")
 	
 	# evaluate loaded model on test data
@@ -163,8 +163,9 @@ def load_image(filename):
 	return img
 
 def numberofcontours():
-	img = cv2.imread(r'../img/eins_zwei_fier_handwritten.png')
-	imgray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+	img = cv2.imread(r'../img/test44.png')
+	imginvert=cv2.bitwise_not(img)
+	imgray = cv2.cvtColor(imginvert, cv2.COLOR_BGR2GRAY)
 	ret, thresh = cv2.threshold(imgray, 127, 255, 0)
 	#thresh = cv2.adaptiveThreshold(imgray,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY,11,2)
 	contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
@@ -173,8 +174,8 @@ def numberofcontours():
 	#cv2.drawContours(img, contours, -1, (0, 255, 0), 3)
 	#cv2.drawContours(imgray, contours, -1, (0, 255, 0), 3)
 
-	cv2.imshow('Image', img)
-	cv2.imshow('Image GRAY', imgray)
+	#cv2.imshow('Image', img)
+	#cv2.imshow('Image GRAY', imgray)
 
 	orig = img.copy()
 	i = 0
@@ -188,14 +189,18 @@ def numberofcontours():
 		# Check the area of contour, if it is very small ignore it
 		if(cv2.contourArea(cnt) < 100):
 			continue
-		#skip overall conture picture
-		
 		# Filtered countours are detected
 		x,y,w,h = cv2.boundingRect(cnt)
+		imginvert= cv2.bitwise_not(img)
+		   # imgray = cv2.cvtColor(imginvert, cv2.COLOR_BGR2GRAY)
+		# contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+		roi = imginvert[y:y+h, x:x+w]
+	      # add this
+		roi= cv2.copyMakeBorder(roi, 10, 10, 10, 10, cv2.BORDER_CONSTANT)
 
 		    # Taking ROI of the cotour
 		#roi = img[y:y+h, x:x+w]
-		roi = imgray[y:y+h, x:x+w]
+		#roi = imgray[y:y+h, x:x+w]
 
 		    # Mark them on the image if you want
 		cv2.rectangle(orig,(x,y),(x+w,y+h),(0,255,0),2)
@@ -203,21 +208,21 @@ def numberofcontours():
 		    # Save your contours or characters
 		cv2.imwrite("../img/roi" + str(i) + ".png", roi)
 		i = i + 1
+	cv2.destroyAllWindows()
 	return i
 
 def predict_image_with_existing_model(numofpics):
+	# load model
+	model = load_existing_model()
 	for i in range(numofpics):
 	# load the image
 		#img = load_image('../img/fuenf_handwritten.png')
 		img = load_image('../img/roi'+ str(i) + '.png')
-	
-		# load model
-		model = load_existing_model()
 		# predict the class
 		digit = model.predict_classes(img)
 		print(digit[0])
 
 # entry point, run the test harness
 #run_test_harness()
-predict_image_with_existing_model(3)
-#predict_image_with_existing_model(numberofcontours())
+#predict_image_with_existing_model(5)
+predict_image_with_existing_model(numberofcontours())
