@@ -15,7 +15,9 @@ import numpy as np
 import cv2
 
 img = cv2.imread(r'../img/Sample5.png')
-imgray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+imginvert= cv2.bitwise_not(img)
+imgray = cv2.cvtColor(imginvert, cv2.COLOR_BGR2GRAY)
+#imginvert = cv2.bitwise_not(imgray)
 ret, thresh = cv2.threshold(imgray, 127, 255, 0)
 contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
 print("Number of contours = " + str(len(contours)))
@@ -49,7 +51,9 @@ for cnt in sorted_ctrs:
     x,y,w,h = cv2.boundingRect(cnt)
 
     # Taking ROI of the cotour
-    roi = img[y:y+h, x:x+w]
+    roi = imgray[y:y+h, x:x+w]
+    
+    #roi= cv2.copyMakeBorder(roi, 2, 2, 2, 2, cv2.BORDER_CONSTANT)
 
     # Mark them on the image if you want
     cv2.rectangle(orig,(x,y),(x+w,y+h),(0,255,0),2)
