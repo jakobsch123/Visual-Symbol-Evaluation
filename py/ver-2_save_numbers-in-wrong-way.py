@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+
+# -*- coding: utf-8 -*-
 """
 Created on Fri Jan  3 17:00:34 2020
 
@@ -9,22 +11,20 @@ Created on Fri Jan  3 17:00:34 2020
 # https://gist.github.com/pknowledge/af2cfb0753abe45c563188794773618f
 # https://answers.opencv.org/question/179510/how-can-i-sort-the-contours-from-left-to-right-and-top-to-bottom/
 
-
-
 import numpy as np
 import cv2
 
+cnt_del = []
+
 img = cv2.imread(r'../img/Sample5.png')
-imginvert= cv2.bitwise_not(img)
-imgray = cv2.cvtColor(imginvert, cv2.COLOR_BGR2GRAY)
-#imginvert = cv2.bitwise_not(imgray)
+imgray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 ret, thresh = cv2.threshold(imgray, 127, 255, 0)
 contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
 print("Number of contours = " + str(len(contours)))
 print(contours[0])
 
-#cv2.drawContours(img, contours, -1, (0, 255, 0), 3)
-#cv2.drawContours(imgray, contours, -1, (0, 255, 0), 3)
+cv2.drawContours(img, contours, -1, (0, 255, 0), 3)
+cv2.drawContours(imgray, contours, -1, (0, 255, 0), 3)
 
 cv2.imshow('Image', img)
 cv2.imshow('Image GRAY', imgray)
@@ -34,15 +34,28 @@ i = 0
 
 
 #sorted_ctrs = sorted(contours, key=lambda ctr: cv2.boundingRect(ctr)[1])
-# Sorting from Left to Right, doesn't take in mind multiple possible rows
-sorted_ctrs = sorted(contours, key=lambda ctr: cv2.boundingRect(ctr)[1] + cv2.boundingRect(ctr)[0] * img.shape[0] )
 #sorted_ctrs = sorted(contours, key=lambda ctr: cv2.boundingRect(ctr)[0] + cv2.boundingRect(ctr)[1] * img.shape[1] )
 # x + y * w
 
+counter = 0
+for cnt in contours:
+	np.delete(contours, np.where(contours == cnt))
+	#print((cv2.contourArea(cnt) < 100).all())
+	if(cv2.contourArea(cnt) < 100):
+		counter+=1
+		cnt_del.append(cnt)
+		#print(cnt.index())
+		
+print(counter)
+	#	print(contours.index(cnt))	
+
+#print(cnt_del)
+#new_arr = np.delete(np.where(contours<100))
+#new_arr = np.where(cv2.contourArea(contours)<=100).delete
+print(str(len(cnt_del)))
 
 
-
-for cnt in sorted_ctrs:
+for cnt in contours:
     # Check the area of contour, if it is very small ignore it
     if(cv2.contourArea(cnt) < 100):
         continue
@@ -51,16 +64,10 @@ for cnt in sorted_ctrs:
     x,y,w,h = cv2.boundingRect(cnt)
 
     # Taking ROI of the cotour
-    # change this
-    imginvert= cv2.bitwise_not(img)
-   # imgray = cv2.cvtColor(imginvert, cv2.COLOR_BGR2GRAY)
-   # contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
-    roi = imginvert[y:y+h, x:x+w]
-    # add this
-    roi= cv2.copyMakeBorder(roi, 10, 10, 10, 10, cv2.BORDER_CONSTANT)
+    roi = img[y:y+h, x:x+w]
 
     # Mark them on the image if you want
-   # cv2.rectangle(orig,(x,y),(x+w,y+h),(0,255,0),2)
+    cv2.rectangle(orig,(x,y),(x+w,y+h),(0,255,0),2)
 
     # Save your contours or characters
     cv2.imwrite("../img/roi" + str(i) + ".png", roi)
