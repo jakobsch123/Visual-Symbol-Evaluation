@@ -21,6 +21,7 @@ from keras.layers import MaxPooling2D
 from keras.layers import Dense
 from keras.layers import Flatten
 from keras.optimizers import SGD
+from keras.layers import GaussianNoises
 
 from keras.models import model_from_json
 from keras.preprocessing.image import load_img
@@ -54,7 +55,8 @@ def prep_pixels(train, test):
 def define_model():
 	model = Sequential()
 	model.add(Conv2D(32, (3, 3), activation='relu', kernel_initializer='he_uniform', input_shape=(28, 28, 1)))
-	model.add(MaxPooling2D((2, 2)))
+    model.add(GaussianNoise(0.1))
+    model.add(MaxPooling2D((2, 2)))
 	model.add(Flatten())
 	model.add(Dense(100, activation='relu', kernel_initializer='he_uniform'))
 	model.add(Dense(10, activation='softmax'))
@@ -123,20 +125,20 @@ def run_test_harness():
 	
 	# serialize model to JSON
 	model_json = model.to_json()
-	with open("model.json", "w") as json_file:
+	with open("modelv3.json", "w") as json_file:
 		json_file.write(model_json)    
     # serialize weights to HDF5
-	model.save_weights("model.h5")
+	model.save_weights("modelv3.h5")
 	print("Saved model to disk")
 
 def load_existing_model():
 	# load json and create model
-	json_file = open('modelv2.json', 'r')
+	json_file = open('modelv3.json', 'r')
 	loaded_model_json = json_file.read()
 	json_file.close()
 	model = model_from_json(loaded_model_json)
 	# load weights into new model
-	model.load_weights("modelv2.h5")
+	model.load_weights("modelv3.h5")
 	print("Loaded model from disk")
 	
 	# evaluate loaded model on test data
@@ -223,6 +225,6 @@ def predict_image_with_existing_model(numofpics):
 		print(digit[0])
 
 # entry point, run the test harness
-#run_test_harness()
-#predict_image_with_existing_model(5)
-predict_image_with_existing_model(numberofcontours())
+run_test_harness()
+#predict_image_with_existing_model(21)
+#predict_image_with_existing_model(numberofcontours())
