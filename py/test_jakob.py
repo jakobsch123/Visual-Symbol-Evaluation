@@ -21,12 +21,12 @@ from keras.layers import MaxPooling2D
 from keras.layers import Dense
 from keras.layers import Flatten
 from keras.optimizers import SGD
-from keras.layers import GaussianNoises
+from keras.layers import GaussianNoise
 
 from keras.models import model_from_json
 from keras.preprocessing.image import load_img
 from keras.preprocessing.image import img_to_array
-import cv2
+import cv2 as cv
 
 # load train and test dataset
 def load_dataset():
@@ -55,8 +55,8 @@ def prep_pixels(train, test):
 def define_model():
 	model = Sequential()
 	model.add(Conv2D(32, (3, 3), activation='relu', kernel_initializer='he_uniform', input_shape=(28, 28, 1)))
-    model.add(GaussianNoise(0.1))
-    model.add(MaxPooling2D((2, 2)))
+	model.add(GaussianNoise(0.1))
+	model.add(MaxPooling2D((2, 2)))
 	model.add(Flatten())
 	model.add(Dense(100, activation='relu', kernel_initializer='he_uniform'))
 	model.add(Dense(10, activation='softmax'))
@@ -125,20 +125,20 @@ def run_test_harness():
 	
 	# serialize model to JSON
 	model_json = model.to_json()
-	with open("modelv3.json", "w") as json_file:
+	with open("modelv4.json", "w") as json_file:
 		json_file.write(model_json)    
     # serialize weights to HDF5
-	model.save_weights("modelv3.h5")
+	model.save_weights("modelv4.h5")
 	print("Saved model to disk")
 
 def load_existing_model():
 	# load json and create model
-	json_file = open('modelv3.json', 'r')
+	json_file = open('modelv4.json', 'r')
 	loaded_model_json = json_file.read()
 	json_file.close()
 	model = model_from_json(loaded_model_json)
 	# load weights into new model
-	model.load_weights("modelv3.h5")
+	model.load_weights("modelv4.h5")
 	print("Loaded model from disk")
 	
 	# evaluate loaded model on test data
@@ -165,52 +165,54 @@ def load_image(filename):
 	return img
 
 def numberofcontours():
-	img = cv2.imread(r'../img/test44.png')
-	imginvert=cv2.bitwise_not(img)
-	imgray = cv2.cvtColor(imginvert, cv2.COLOR_BGR2GRAY)
-	ret, thresh = cv2.threshold(imgray, 127, 255, 0)
-	#thresh = cv2.adaptiveThreshold(imgray,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY,11,2)
-	contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+	img = cv.imread(r'../img/Test2.jpg',0)
+	img = cv.medianBlur(img,5)
+	ret,th1 = cv.threshold(img,127,255,cv.THRESH_BINARY)
+	th2 = cv.adaptiveThreshold(img,255,cv.ADAPTIVE_THRESH_MEAN_C,\
+            cv.THRESH_BINARY,11,2)
+	th3 = cv.adaptiveThreshold(img,255,cv.ADAPTIVE_THRESH_GAUSSIAN_C,\
+         cv.THRESH_BINARY,11,2)
+	titles = ['Original Image', 'Global Thresholding (v = 127)',
+            'Adaptive Mean Thresholding', 'Adaptive Gaussian Thresholding']
+	images = [img, th1, th2, th3]
+	for i in range(4):
+		pyplot.subplot(2,2,i+1),pyplot.imshow(images[i],'gray')
+		pyplot.title(titles[i])
+		pyplot.xticks([]),pyplot.yticks([])
+		
+	contours, hierarchy = cv.findContours(th3, cv.RETR_TREE, cv.CHAIN_APPROX_NONE)
 	print("Number of contours = " + str(len(contours)))
 	print(contours[0])
-	#cv2.drawContours(img, contours, -1, (0, 255, 0), 3)
-	#cv2.drawContours(imgray, contours, -1, (0, 255, 0), 3)
-
-	#cv2.imshow('Image', img)
-	#cv2.imshow('Image GRAY', imgray)
-
-	orig = img.copy()
-	i = 0
-	#sorted_ctrs = sorted(contours, key=lambda ctr: cv2.boundingRect(ctr)[1])
-	# Sorting from Left to Right, doesn't take in mind multiple possible rows
-	sorted_ctrs = sorted(contours, key=lambda ctr: cv2.boundingRect(ctr)[1] + cv2.boundingRect(ctr)[0] * img.shape[0] )
-	#sorted_ctrs = sorted(contours, key=lambda ctr: cv2.boundingRect(ctr)[0] + cv2.boundingRect(ctr)[1] * img.shape[1] )
-	# x + y * w
-
+	
+	sorted_ctrs = sorted(contours, key=lambda ctr: cv.boundingRect(ctr)[1] + cv.boundingRect(ctr)[0] * img.shape[0] )
+	i=0
 	for cnt in sorted_ctrs:
-		# Check the area of contour, if it is very small ignore it
-		if(cv2.contourArea(cnt) < 100):
-			continue
-		# Filtered countours are detected
-		x,y,w,h = cv2.boundingRect(cnt)
-		imginvert= cv2.bitwise_not(img)
-		   # imgray = cv2.cvtColor(imginvert, cv2.COLOR_BGR2GRAY)
-		# contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
-		roi = imginvert[y:y+h, x:x+w]
-	      # add this
-		roi= cv2.copyMakeBorder(roi, 10, 10, 10, 10, cv2.BORDER_CONSTANT)
+    # Check the area of contour, if it is very small ignore it
+	    if(cv.contourArea(cnt) < 300):
+			      continue
 
-		    # Taking ROI of the cotour
-		#roi = img[y:y+h, x:x+w]
-		#roi = imgray[y:y+h, x:x+w]
+    # Filtered countours are detected
+	    x,y,w,h = cv.boundingRect(cnt)
 
-		    # Mark them on the image if you want
-		cv2.rectangle(orig,(x,y),(x+w,y+h),(0,255,0),2)
+    # Taking ROI of the cotour
+    # change this
+   # imginvert= cv2.bitwise_not(img)
+   # imgray = cv2.cvtColor(imginvert, cv2.COLOR_BGR2GRAY)
+   # contours, hierarchy = cv2.findContours(thresh, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
+	    roi = th3[y:y+h, x:x+w]
+	    roi= cv.bitwise_not(roi)
+    # add this
+	    roi= cv.copyMakeBorder(roi, 10, 10, 10, 10, cv.BORDER_CONSTANT)
+    
+    # Mark them on the image if you want
+   # cv2.rectangle(orig,(x,y),(x+w,y+h),(0,255,0),2)
 
-		    # Save your contours or characters
-		cv2.imwrite("../img/roi" + str(i) + ".png", roi)
-		i = i + 1
-	cv2.destroyAllWindows()
+    # Save your contours or characters
+	    cv.imwrite("../img/roi" + str(i) + ".png", roi)
+
+	    i = i + 1 
+ 
+	cv.destroyAllWindows()
 	return i
 
 def predict_image_with_existing_model(numofpics):
@@ -225,6 +227,6 @@ def predict_image_with_existing_model(numofpics):
 		print(digit[0])
 
 # entry point, run the test harness
-run_test_harness()
-#predict_image_with_existing_model(21)
-#predict_image_with_existing_model(numberofcontours())
+#run_test_harness()
+#predict_image_with_existing_model(10)
+predict_image_with_existing_model(numberofcontours())
