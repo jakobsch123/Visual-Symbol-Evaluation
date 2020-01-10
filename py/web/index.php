@@ -50,7 +50,7 @@
             <br>
             <br>
             <p>Recognized values:</p>
-            <textarea rows="2" class="w-100">
+            <textarea id="textpred" rows="2" class="w-100">
                 Sample Output
             </textarea>
             <br>
