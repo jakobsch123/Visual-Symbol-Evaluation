@@ -6,5 +6,5 @@ save_non_project_files = False
 
 [main]
 version = 0.2.0
-recent_files = ['..\\..\\..\\Users\\alehof\\.spyder-py3\\temp.py', 'py\\test_digit_separation.py', 'py\\test_jakob.py', 'py\\Test_Alex.py', 'py\\save_numbers-in-wrong-way.py', 'py\\sorting_contours.py']
+recent_files = ['py\\test_digit_separation.py', 'py\\test_jakob.py', '..\\..\\..\\Anaconda3\\envs\\machine\\lib\\site-packages\\keras\\preprocessing\\image.py']
 
