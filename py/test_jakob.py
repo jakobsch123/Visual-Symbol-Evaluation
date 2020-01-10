@@ -55,7 +55,7 @@ def prep_pixels(train, test):
 def define_model():
 	model = Sequential()
 	model.add(Conv2D(32, (3, 3), activation='relu', kernel_initializer='he_uniform', input_shape=(28, 28, 1)))
-	model.add(GaussianNoise(0.1))
+	model.add(GaussianNoise(0.25))
 	model.add(MaxPooling2D((2, 2)))
 	model.add(Flatten())
 	model.add(Dense(100, activation='relu', kernel_initializer='he_uniform'))
@@ -75,7 +75,7 @@ def evaluate_model(model, dataX, dataY, n_folds=5):
 		# select rows for train and test
 		trainX, trainY, testX, testY = dataX[train_ix], dataY[train_ix], dataX[test_ix], dataY[test_ix]
 		# fit model
-		history = model.fit(trainX, trainY, epochs=10, batch_size=32, validation_data=(testX, testY), verbose=0)
+		history = model.fit(trainX, trainY, epochs=20, batch_size=32, validation_data=(testX, testY), verbose=0)
 		# evaluate model
 		_, acc = model.evaluate(testX, testY, verbose=0)
 		print('> %.3f' % (acc * 100.0))
@@ -125,20 +125,20 @@ def run_test_harness():
 	
 	# serialize model to JSON
 	model_json = model.to_json()
-	with open("modelv4.json", "w") as json_file:
+	with open("modelv5.json", "w") as json_file:
 		json_file.write(model_json)    
     # serialize weights to HDF5
-	model.save_weights("modelv4.h5")
+	model.save_weights("modelv5.h5")
 	print("Saved model to disk")
 
 def load_existing_model():
 	# load json and create model
-	json_file = open('modelv4.json', 'r')
+	json_file = open('modelv5.json', 'r')
 	loaded_model_json = json_file.read()
 	json_file.close()
 	model = model_from_json(loaded_model_json)
 	# load weights into new model
-	model.load_weights("modelv4.h5")
+	model.load_weights("modelv5.h5")
 	print("Loaded model from disk")
 	
 	# evaluate loaded model on test data
@@ -165,7 +165,7 @@ def load_image(filename):
 	return img
 
 def numberofcontours():
-	img = cv.imread(r'../img/Test2.jpg',0)
+	img = cv.imread(r'../img/test3.png',0)
 	img = cv.medianBlur(img,5)
 	ret,th1 = cv.threshold(img,127,255,cv.THRESH_BINARY)
 	th2 = cv.adaptiveThreshold(img,255,cv.ADAPTIVE_THRESH_MEAN_C,\
@@ -188,7 +188,7 @@ def numberofcontours():
 	i=0
 	for cnt in sorted_ctrs:
     # Check the area of contour, if it is very small ignore it
-	    if(cv.contourArea(cnt) < 300):
+	    if(cv.contourArea(cnt) < 150):
 			      continue
 
     # Filtered countours are detected
