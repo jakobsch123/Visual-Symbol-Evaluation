@@ -122,11 +122,11 @@ def run_test_harness():
 	summarize_diagnostics(histories)
 	# summarize estimated performance
 	summarize_performance(scores)
-	
+
 	# serialize model to JSON
 	model_json = model.to_json()
 	with open("modelv4.json", "w") as json_file:
-		json_file.write(model_json)    
+		json_file.write(model_json)
     # serialize weights to HDF5
 	model.save_weights("modelv4.h5")
 	print("Saved model to disk")
@@ -140,7 +140,7 @@ def load_existing_model():
 	# load weights into new model
 	model.load_weights("modelv4.h5")
 	print("Loaded model from disk")
-	
+
 	# evaluate loaded model on test data
 	a, b, X, Y = load_dataset()
 	model.compile(loss='binary_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
@@ -158,7 +158,7 @@ def load_image(filename):
 	img = img_to_array(img)
 	# reshape into a single sample with 1 channel
 	img = img.reshape(1, 28, 28, 1)
-	
+
 	# prepare pixel data
 	img = img.astype('float32')
 	img = img / 255.0
@@ -179,11 +179,11 @@ def numberofcontours():
 		pyplot.subplot(2,2,i+1),pyplot.imshow(images[i],'gray')
 		pyplot.title(titles[i])
 		pyplot.xticks([]),pyplot.yticks([])
-		
+
 	contours, hierarchy = cv.findContours(th3, cv.RETR_TREE, cv.CHAIN_APPROX_NONE)
 	print("Number of contours = " + str(len(contours)))
 	print(contours[0])
-	
+
 	sorted_ctrs = sorted(contours, key=lambda ctr: cv.boundingRect(ctr)[1] + cv.boundingRect(ctr)[0] * img.shape[0] )
 	i=0
 	for cnt in sorted_ctrs:
@@ -203,15 +203,15 @@ def numberofcontours():
 	    roi= cv.bitwise_not(roi)
     # add this
 	    roi= cv.copyMakeBorder(roi, 10, 10, 10, 10, cv.BORDER_CONSTANT)
-    
+
     # Mark them on the image if you want
    # cv2.rectangle(orig,(x,y),(x+w,y+h),(0,255,0),2)
 
     # Save your contours or characters
 	    cv.imwrite("../img/roi" + str(i) + ".png", roi)
 
-	    i = i + 1 
- 
+	    i = i + 1
+
 	cv.destroyAllWindows()
 	return i
 
@@ -222,6 +222,8 @@ def predict_image_with_existing_model(numofpics):
 	# load the image
 		#img = load_image('../img/fuenf_handwritten.png')
 		img = load_image('../img/roi'+ str(i) + '.png')
+		# to remove the created pictures
+	#	os.remove('../img/roi'+ str(i) + '.png')
 		# predict the class
 		digit = model.predict_classes(img)
 		print(digit[0])
