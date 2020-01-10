@@ -1,0 +1,28 @@
+
+.leftcol {
+    background-color: grey;
+}
+
+.col-md-7 {
+    background-color: lightgrey;
+}
+
+main, html{
+    height: calc(100% - 56px);
+}
+.maincol {
+    height: 100%;
+    background-color: lightgrey;
+}
+    
+.file {
+  visibility: hidden;
+  position: absolute;
+}
+.btn-group-lg>.btn, .btn-lg {
+margin-left: 20px;
+text-align: center;
+}
+.h1, h1 {
+    padding-left: 10px;
+}
