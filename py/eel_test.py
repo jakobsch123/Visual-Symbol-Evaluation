@@ -10,7 +10,7 @@ eel.init('web')
 
 @eel.expose
 def my_python_method(pic):
-	pic = pic + 1
+	pic = pic * -1
 	return pic
 
 @eel.expose                         # Expose this function to Javascript
@@ -18,6 +18,6 @@ def say_hello_py(x):
     print('Hello from %s' % x)
 
 say_hello_py('Python World!')
-#eel.say_hello_js('Python World!')   # Call a Javascript function
+eel.say_hello_js('Python World!')   # Call a Javascript function
 
-eel.start('Visual Symbol Evaluation/index.php', size=(650, 612))
+eel.start('index.php', size=(650, 612))
