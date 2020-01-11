@@ -229,7 +229,7 @@ def predict_image_with_existing_model(numofpics):
 		dig = dig + str(model.predict_classes(img))
 	print(dig)
 		#digit.append(model.predict_classes(img))
-	return 6
+	return dig
 
 
 
@@ -243,6 +243,6 @@ def say_hello_py(x):
     print('Hello from %s' % x)
 
 say_hello_py('Python World!')
-eel.say_hello_js('Python World!')   # Call a Javascript function
+#eel.say_hello_js('Python World!')   # Call a Javascript function
 
-eel.start('index.php', size=(650, 612))
+eel.start('index.html', size=(650, 612))
