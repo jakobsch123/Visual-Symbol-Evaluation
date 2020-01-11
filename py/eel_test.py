@@ -165,8 +165,8 @@ def load_image(filename):
 	return img
 
 @eel.expose
-def numberofcontours():
-	img = cv.imread(r'../img/test3.png',0)
+def numberofcontours(img):
+	#img = cv.imread(r'../img/webp.jpg',0)
 	img = cv.medianBlur(img,5)
 	ret,th1 = cv.threshold(img,127,255,cv.THRESH_BINARY)
 # 	th2 = cv.adaptiveThreshold(img,255,cv.ADAPTIVE_THRESH_MEAN_C,\
