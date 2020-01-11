@@ -44,8 +44,7 @@
             <br>
             <br>
             <div class="btn-group-lg mx-auto">
-                <button type="button" class="btn btn-dark">Training</button>
-                <button id="btn_testing" onclick="btn_testing()" type="button" class="btn btn-dark">Testing</button>
+                <button id="btn_testing" onclick="btn_testing()" type="button" class="btn btn-dark">Evaluate</button>
             </div>
             <br>
             <br>
@@ -55,22 +54,7 @@
             </textarea>
             <br>
             <br>
-            <p>Verify:</p>
-
-            <form>
-                <div>
-                    <input type="radio" id="choice1"
-                           name="contact" value="True">
-                    <label for="choice1">True</label>
-
-                    <input type="radio" id="choice2"
-                           name="contact" value="False">
-                    <label for="choice2">False</label>
-                    <div>
-                        <button class="btn-dark" type="submit">Submit</button>
-                    </div>
-                </div>
-            </form>
+        
         </div>
         <div class="col-md-7">
             <img src="https://placehold.it/800x600" id="preview" class="img-fluid" alt="Responsive image">
