@@ -6,5 +6,5 @@ save_non_project_files = False
 
 [main]
 version = 0.2.0
-recent_files = ['py\\test_digit_separation.py', 'py\\test_jakob.py', '..\\..\\..\\Anaconda3\\envs\\machine\\lib\\site-packages\\keras\\preprocessing\\image.py']
+recent_files = ['py\\test_digit_separation.py', 'py\\test_jakob.py', '..\\..\\..\\Anaconda3\\envs\\machine\\lib\\site-packages\\keras\\preprocessing\\image.py', 'index.php', 'QRCode.py', 'web\\basic3.html', 'js\\eel_test.js', 'web\\app.js', 'py\\web\\js\\eel_test.js', 'py\\eel_test.py', 'py\\ver-2_save_numbers-in-wrong-way.py', 'web\\index.php', 'py\\web\\index.php', 'web\\main.js', 'cefpython_test.py', 'wx_python_test.py']
 
