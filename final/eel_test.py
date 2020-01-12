@@ -26,6 +26,7 @@ import eel
 
 import os
 import glob
+import getpass
 
 eel.init('web')
 
@@ -128,10 +129,10 @@ def run_test_harness():
 
 	# serialize model to JSON
 	model_json = model.to_json()
-	with open("modelv5.json", "w") as json_file:
+	with open("modelv6.json", "w") as json_file:
 		json_file.write(model_json)
     # serialize weights to HDF5
-	model.save_weights("modelv5.h5")
+	model.save_weights("modelv6.h5")
 	print("Saved model to disk")
 
 def load_existing_model():
@@ -167,8 +168,8 @@ def load_image(filename):
 	return img
 
 @eel.expose
-def numberofcontours(img):
-	img = cv.imread(img,0)
+def numberofcontours(path):
+	img = cv.imread(path,0)
 	img = cv.medianBlur(img,5)
 	ret,th1 = cv.threshold(img,127,255,cv.THRESH_BINARY)
 # 	th2 = cv.adaptiveThreshold(img,255,cv.ADAPTIVE_THRESH_MEAN_C,\
@@ -185,7 +186,7 @@ def numberofcontours(img):
 
 	contours, hierarchy = cv.findContours(th3, cv.RETR_TREE, cv.CHAIN_APPROX_NONE)
 	print("Number of contours = " + str(len(contours)))
-	#print(contours[0])
+#	print(contours[0])
 
 	sorted_ctrs = sorted(contours, key=lambda ctr: cv.boundingRect(ctr)[1] + cv.boundingRect(ctr)[0] * img.shape[0] )
 	i=0
@@ -226,6 +227,9 @@ def delimgs():
 
 @eel.expose
 def predict_image_with_existing_model(picpath):
+	print(getpass.getuser())
+	picpath = r'C:/Users/' + getpass.getuser() + '/Downloads/helloWorld.png'
+	print(picpath)
 	numofpics = numberofcontours(picpath)
 	# load model
 	dig = ''

@@ -46,6 +46,7 @@
             <div class="btn-group-lg mx-auto">
                 <button id="btn_testing" onclick="btn_testing()" type="button" class="btn btn-dark">Evaluate</button>
                 <button id="camera--trigger" type="button" class="btn btn-dark">TakePicture</button><!-- Camera trigger -->
+                <button id="del" type="button" class="btn btn-dark" onclick="btn_reset()">Reset</button>
             </div>
             <br>
             <br>

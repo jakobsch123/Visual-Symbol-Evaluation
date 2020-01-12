@@ -41,9 +41,10 @@ cameraTrigger.onclick = function() {
     // track.stop();
 };
 
-function download(dataurl, filename) {
+function download(filename) {
   var a = document.createElement("a");
-  a.href = dataurl;
+  image = cameraOutput.src;
+  a.href = cameraOutput.src;
   a.setAttribute("download", filename);
   a.click();
 }
