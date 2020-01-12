@@ -33,10 +33,19 @@ cameraTrigger.onclick = function() {
 	var cameraValue = cameraOutput.src;
 	//console.log(cameraValue)
 	//var decrypted_cameraValue = decodeURIComponent(cameraValue);
-	eel.url_to_img(cameraValue)(printresult);
+	
+	download("data:"+ cameraValue, "helloWorld.png");
+	eel.numberofcontours("C:\\Users\\jakob\\Downloads\\helloWorld.png")
     cameraOutput.classList.add("taken");
     // track.stop();
 };
+
+function download(dataurl, filename) {
+  var a = document.createElement("a");
+  a.href = dataurl;
+  a.setAttribute("download", filename);
+  a.click();
+}
 
 function printresult(res){
 	console.log(res);

@@ -30,7 +30,8 @@ def generate_qr(data):
 
 @eel.expose
 def numberofcontours(img):
-	#img = cv.imread(r'../img/webp.jpg',0)
+	print(img)
+	img = cv.imread(img,0)
 	img = cv.medianBlur(img,5)
 	ret,th1 = cv.threshold(img,127,255,cv.THRESH_BINARY)
 # 	th2 = cv.adaptiveThreshold(img,255,cv.ADAPTIVE_THRESH_MEAN_C,\
@@ -79,16 +80,5 @@ def numberofcontours(img):
 
 	cv.destroyAllWindows()
 	return i
-
-@eel.expose
-def url_to_img(url):
-	print(url)
-	resp = urllib.request.urlopen(url)
-	image = np.asarray(bytearray(resp.read()),dtype="uint8")
-	image = cv.imdecode(image,cv.IMREAD_COLOR)
-	plt.plot(image)
-	a = numberofcontours(image)
-	print("NoC" + str(a))
-	return a
 
 eel.start('basic3.html', size=(1000, 600))
