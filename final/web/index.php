@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="./css/main.css">
-    <script type="text/javascript" src="./eel/eel.js"></script>
+    <script type="text/javascript" src="/eel.js"></script>
     <script type="text/javascript">
         eel.expose(say_hello_js); // Expose this function to Python
         function say_hello_js(x) {
@@ -50,7 +50,7 @@
             <br>
             <br>
             <p>Recognized values:</p>
-            <textarea rows="2" class="w-100">
+            <textarea id="textpred" rows="2" class="w-100">
                 Sample Output
             </textarea>
             <br>
@@ -83,7 +83,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="./js/upload.js"></script>
+<script type="text/javascript" src="./js/app.js"></script>
 <script type="text/javascript" src="./js/eel_test.js"></script>
-<script type="text/javascript" src="app.js"></script>
 </body>
 </html>

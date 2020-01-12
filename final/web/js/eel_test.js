@@ -24,9 +24,13 @@ function callback(){
 }*/
 
 function print_result(values) {
-    document.getElementById("textpred").innerText = values;
+	document.getElementById("textpred").innerText = values;
 }
 
 function btn_testing() {
-    eel.predict_image_with_existing_model(5)(print_result);
+	eel.delimgs()
+	download("data:"+ image, "helloWorld.png");
+	//eel.numberofcontours("C:\\Users\\%user\\Downloads\\helloWorld.png");
+	//console.log("bis da her");
+    eel.predict_image_with_existing_model("C:\\Users\\jakob\\Downloads\\helloWorld.png")(print_result);
 }

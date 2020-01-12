@@ -24,6 +24,9 @@ from keras.preprocessing.image import img_to_array
 import cv2 as cv
 import eel
 
+import os
+import glob
+
 eel.init('web')
 
 digit = []
@@ -146,7 +149,6 @@ def load_existing_model():
 	model.compile(loss='binary_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
 	score = model.evaluate(X, Y, verbose=0)
 	print("%s: %.2f%%" % (model.metrics_names[1], score[1]*100))
-	model
 	return model
 
 # load and prepare the image
@@ -166,7 +168,7 @@ def load_image(filename):
 
 @eel.expose
 def numberofcontours(img):
-	#img = cv.imread(r'../img/webp.jpg',0)
+	img = cv.imread(img,0)
 	img = cv.medianBlur(img,5)
 	ret,th1 = cv.threshold(img,127,255,cv.THRESH_BINARY)
 # 	th2 = cv.adaptiveThreshold(img,255,cv.ADAPTIVE_THRESH_MEAN_C,\
@@ -183,7 +185,7 @@ def numberofcontours(img):
 
 	contours, hierarchy = cv.findContours(th3, cv.RETR_TREE, cv.CHAIN_APPROX_NONE)
 	print("Number of contours = " + str(len(contours)))
-	print(contours[0])
+	#print(contours[0])
 
 	sorted_ctrs = sorted(contours, key=lambda ctr: cv.boundingRect(ctr)[1] + cv.boundingRect(ctr)[0] * img.shape[0] )
 	i=0
@@ -209,7 +211,7 @@ def numberofcontours(img):
    # cv2.rectangle(orig,(x,y),(x+w,y+h),(0,255,0),2)
 
     # Save your contours or characters
-	    cv.imwrite("../img/roi" + str(i) + ".png", roi)
+	    cv.imwrite("./img/roi" + str(i) + ".png", roi)
 
 	    i = i + 1
 
@@ -217,17 +219,25 @@ def numberofcontours(img):
 	return i
 
 @eel.expose
-def predict_image_with_existing_model(numofpics):
+def delimgs():
+	files = glob.glob('C:/Users/jakob/Downloads/helloWorld*.png')
+	for file in files:
+		os.remove(file)
+
+@eel.expose
+def predict_image_with_existing_model(picpath):
+	numofpics = numberofcontours(picpath)
 	# load model
 	dig = ''
 	model = load_existing_model()
 	for i in range(numofpics):
 	# load the image
 		#img = load_image('../img/fuenf_handwritten.png')
-		img = load_image('../img/roi'+ str(i) + '.png')
+		img = load_image('./img/roi'+ str(i) + '.png')
 		# predict the class
 		dig = dig + str(model.predict_classes(img))
 	print(dig)
+	
 		#digit.append(model.predict_classes(img))
 	return dig
 
