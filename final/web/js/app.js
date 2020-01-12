@@ -2,6 +2,7 @@
 var constraints = { video: { facingMode: "user" }, audio: false };
 var track = null;
 var image = null;
+var pfusch = 1;
 
 // Define constants
 const cameraView = document.querySelector("#camera--view"),

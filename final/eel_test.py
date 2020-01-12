@@ -221,7 +221,7 @@ def numberofcontours(path):
 
 @eel.expose
 def delimgs():
-	files = glob.glob('C:/Users/jakob/Downloads/helloWorld*.png')
+	files = glob.glob('C:/Users/Besitzer/Downloads/helloWorld*.png')
 	for file in files:
 		os.remove(file)
 
