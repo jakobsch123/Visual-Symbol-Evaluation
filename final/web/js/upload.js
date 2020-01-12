@@ -18,6 +18,6 @@ $('input[type="file"]').change(function(e) {
     document.getElementById("preview").src = e.target.result;
   };
   // read the image file as a data URL.
-  document.getElementById("preview").value = e.target.result.toDataURL("image/png");
-  //document.getElementById("preview").value = reader.readAsDataURL(this.files[0]);
+ // document.getElementById("preview").value = e.target.result.toDataURL("image/png");
+  document.getElementById("preview").value = reader.readAsDataURL(this.files[0]);
 });
