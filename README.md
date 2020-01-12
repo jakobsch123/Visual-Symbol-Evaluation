@@ -1,1 +1,0 @@
-# Visual-Symbol-Evaluation
