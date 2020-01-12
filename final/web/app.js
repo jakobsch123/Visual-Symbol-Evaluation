@@ -5,8 +5,8 @@ var image = null;
 
 // Define constants
 const cameraView = document.querySelector("#camera--view"),
-    cameraOutput = document.querySelector("#camera--output"),
-    cameraSensor = document.querySelector("#preview"),
+    cameraOutput = document.querySelector("#preview"),
+    cameraSensor = document.querySelector("#camera--sensor"),
     cameraTrigger = document.querySelector("#camera--trigger");
 
 // Access the device camera and stream to cameraView
@@ -29,15 +29,19 @@ cameraTrigger.onclick = function() {
     cameraSensor.getContext("2d").drawImage(cameraView, 0, 0);
 
 
-	cameraOutput.src = cameraSensor.toDataURL("image/png");
-	var cameraValue = cameraOutput.src;
+
+	var cameraValue = cameraSensor.toDataURL("image/png");
+    cameraOutput.src = cameraValue;
 	//console.log(cameraValue)
 	//var decrypted_cameraValue = decodeURIComponent(cameraValue);
 	
 	download("data:"+ cameraValue, "helloWorld.png");
 	eel.numberofcontours("C:\\Users\\%user\\Downloads\\helloWorld.png");
 
-        document.getElementById("preview").src = cameraValue;
+
+
+
+   // document.getElementById("preview").src = cameraSensor.toDataURL("image/png");
    // cameraOutput.classList.add("taken");
     // track.stop();
 };

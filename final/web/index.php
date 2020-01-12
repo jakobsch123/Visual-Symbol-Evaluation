@@ -60,23 +60,21 @@
         <div class="col-md-7">
             <img src="https://placehold.it/800x600" id="preview" class="img-fluid" alt="Responsive image">
             <!-- Camera -->
-            <main id="camera">
+            <div id="camera">
 
                 <!-- Camera sensor -->
-                 <canvas id="camera--sensor">
-                     
-                 </canvas>
+                <canvas class="d-none" id="camera--sensor"></canvas>
 
                 <!-- Camera view -->
                 <video id="camera--view" autoplay playsinline></video>
 
                 <!-- Camera output -->
-                <!-- <img src="//:0" alt="" id="camera--output">-->
 
 
 
 
-            </main>
+
+            </div>
 
         </div>
 </div>
