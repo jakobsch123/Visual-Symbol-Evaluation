@@ -45,6 +45,7 @@
             <br>
             <div class="btn-group-lg mx-auto">
                 <button id="btn_testing" onclick="btn_testing()" type="button" class="btn btn-dark">Evaluate</button>
+                <button id="camera--trigger" type="button" class="btn btn-dark">TakePicture</button><!-- Camera trigger -->
             </div>
             <br>
             <br>
@@ -58,6 +59,25 @@
         </div>
         <div class="col-md-7">
             <img src="https://placehold.it/800x600" id="preview" class="img-fluid" alt="Responsive image">
+            <!-- Camera -->
+            <main id="camera">
+
+                <!-- Camera sensor -->
+                 <canvas id="camera--sensor">
+                     
+                 </canvas>
+
+                <!-- Camera view -->
+                <video id="camera--view" autoplay playsinline></video>
+
+                <!-- Camera output -->
+                <!-- <img src="//:0" alt="" id="camera--output">-->
+
+
+
+
+            </main>
+
         </div>
 </div>
 
@@ -66,5 +86,6 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="./js/upload.js"></script>
 <script type="text/javascript" src="./js/eel_test.js"></script>
+<script type="text/javascript" src="app.js"></script>
 </body>
 </html>

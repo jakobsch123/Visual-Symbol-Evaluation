@@ -245,4 +245,4 @@ def say_hello_py(x):
 say_hello_py('Python World!')
 #eel.say_hello_js('Python World!')   # Call a Javascript function
 
-eel.start('index.html', size=(650, 612))
+eel.start('index.php', size=(650, 612))
